@@ -4,14 +4,12 @@
 set -euo pipefail
 
 HOMEBREW_INSTALL_SCRIPT="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
-FLATHUB_REPO="https://dl.flathub.org/repo/flathub.flatpakrepo"
 SYSTEM_HOSTNAME="$(uname -n | sed 's|.local||g')"
 SYSTEM_TYPE="$(uname -s)"
 PATH="/opt/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:/usr/local/bin:${PATH}"; export PATH
 
 SKIP_BOOTSTRAP=""
 SKIP_HOMEBREW_LINUX=""
-SKIP_FLATHUB_LINUX=""
 
 usage() {
   echo "install: system and Ansible bootstrap script"
@@ -22,7 +20,6 @@ usage() {
   echo "  -h Show help and exit"
   echo "  -r Resume an interrupted Ansible run"
   echo "  -w Skip Homebrew install on Linux (noop for macOS)"
-  echo "  -f Skip Flathub install on Linux (noop for macOS)"
   echo
 }
 
@@ -37,13 +34,6 @@ install_homebrew() {
     macos) sudo softwareupdate --install-rosetta ;;
   esac
   NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL $HOMEBREW_INSTALL_SCRIPT)"
-}
-
-install_flathub() {
-  case "$ID" in
-    debian|ubuntu) sudo apt-get install -y flatpak ;;
-  esac
-  flatpak remote-add --if-not-exists flathub "$FLATHUB_REPO"
 }
 
 bootstrap_mac() {
@@ -79,10 +69,6 @@ bootstrap_linux() {
   if [ -z "$SKIP_HOMEBREW_LINUX" ]; then
     install_homebrew
   fi
-
-  if [ -z "$SKIP_FLATHUB_LINUX" ]; then
-    install_flathub
-  fi
 }
 
 # ----------------------------------------
@@ -102,7 +88,6 @@ while getopts "hrwf" opt; do
     h) usage; exit 0 ;;
     r) SKIP_BOOTSTRAP=1 ;;
     w) SKIP_HOMEBREW_LINUX=1 ;;
-    f) SKIP_FLATHUB_LINUX=1 ;;
     *) usage; exit 1 ;;
   esac
 done
