@@ -75,8 +75,14 @@ bootstrap_linux() {
 # Main functions
 # ----------------------------------------
 
-main_setup_ansible() {
-  brew install ansible ansible-lint
+main_setup_venv() {
+  export ANSIBLE_PYTHON_INTERPRETER=".venv/bin/python3"
+  export ANSIBLE_HOME="${HOME}/.config/ansible"
+
+  git pull
+
+  uv sync --locked
+  . .venv/bin/activate
 }
 
 # ----------------------------------------
@@ -108,4 +114,4 @@ if [ ! -e "${HOME}/.config/ansible" ]; then
   mkdir "${HOME}/.config/ansible"
 fi
 
-main_setup_ansible
+main_setup_venv
