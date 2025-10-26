@@ -40,6 +40,7 @@ bootstrap_mac() {
   pgrep caffeinate >/dev/null || (caffeinate -d -i -m -u &)
   sudo scutil --set HostName "$SYSTEM_HOSTNAME"
   ID=macos install_homebrew
+  brew install uv
 }
 
 bootstrap_linux() {
@@ -68,6 +69,7 @@ bootstrap_linux() {
 
   if [ -z "$SKIP_HOMEBREW_LINUX" ]; then
     install_homebrew
+    brew install uv
   fi
 }
 
