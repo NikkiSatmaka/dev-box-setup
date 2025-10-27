@@ -1,0 +1,17 @@
+---
+- name: "Skip role if not in host_vars"
+  ansible.builtin.meta: end_role
+  when: role_name not in global_host_roles
+  tags: [always]
+
+- name: "Include per-system tasks"
+  ansible.builtin.include_tasks:
+    file: "{{ ansible_facts['system'] }}.yml"
+
+- name: "Post-install commands"
+  ansible.builtin.command:
+    cmd: "{{ item['cmd'] }}"
+  loop: "{{ pkg_mgr_post_install_commands }}"
+  loop_control:
+    label: "{{ item['label'] }}"
+  changed_when: true

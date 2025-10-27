@@ -1,0 +1,32 @@
+---
+- name: "Enumerate services"
+  ansible.builtin.service_facts:
+  become: true
+  tags: [apt, dnf]
+
+- name: "Stop packagekit"
+  ansible.builtin.systemd:
+    name: "packagekit.service"
+    state: stopped
+    enabled: false
+  become: true
+  notify: Start packagekit
+  when: "'packagekit.service' in ansible_facts['services']"
+  tags: [apt, dnf]
+
+- name: "Include OS package manager tasks"
+  ansible.builtin.include_tasks:
+    file: "pkg_mgr/{{ ansible_facts['pkg_mgr'] }}.yml"
+  tags: [apt, dnf]
+
+- name: "Include Homebrew tasks"
+  ansible.builtin.include_tasks:
+    file: "pkg_mgr/homebrew.yml"
+  when: (ansible_facts['architecture'] == 'x86_64') or (ansible_facts['architecture'] == 'amd64')
+  tags: [formulas]
+
+- name: "Include Flakpak tasks"
+  ansible.builtin.include_tasks:
+    file: "pkg_mgr/flatpak.yml"
+  when: pkg_mgr_desktop_present
+  tags: [flatpak]
