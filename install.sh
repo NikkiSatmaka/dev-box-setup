@@ -1,7 +1,7 @@
-#!/usr/bin/env bash
-# shellcheck disable=SC1090,SC1091
+#!/usr/bin/env sh
+# shellcheck shell=sh disable=SC1090,SC1091
 
-set -euo pipefail
+set -o errexit
 
 HOMEBREW_INSTALL_SCRIPT="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
 SYSTEM_HOSTNAME="$(uname -n | sed 's|.local||g')"
