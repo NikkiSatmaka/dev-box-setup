@@ -88,7 +88,23 @@ main_setup_venv() {
   git pull
 
   uv sync --locked
-  . .venv/bin/activate
+}
+
+
+main_build_host_vars() {
+  HOST_VARS="host_vars/${SYSTEM_HOSTNAME}.yml"
+
+  if [ ! -s "$HOST_VARS" ]; then
+    ansible-playbook play_bootstrap_ansible.yml
+    # reminder: these grep flags are BSD-compatible
+    grep "^(#|-|$)" roles/*/defaults/main.yml \
+      --invert-match \
+      --no-filename \
+      --extended-regexp \
+      --color=never \
+      | sed "s/^/# /g" >> "${HOST_VARS}"
+    vi "$HOST_VARS"
+  fi
 }
 
 
@@ -123,3 +139,4 @@ fi
 
 
 main_setup_venv
+main_build_host_vars
