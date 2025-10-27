@@ -23,6 +23,7 @@ usage() {
   echo
 }
 
+
 # ----------------------------------------
 # Bootstrap funcions
 # ----------------------------------------
@@ -36,12 +37,14 @@ install_homebrew() {
   NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL $HOMEBREW_INSTALL_SCRIPT)"
 }
 
+
 bootstrap_mac() {
   pgrep caffeinate >/dev/null || (caffeinate -d -i -m -u &)
   sudo scutil --set HostName "$SYSTEM_HOSTNAME"
   ID=macos install_homebrew
   brew install uv
 }
+
 
 bootstrap_linux() {
   if sudo systemctl is-active packagekit.service --quiet; then
@@ -73,6 +76,7 @@ bootstrap_linux() {
   fi
 }
 
+
 # ----------------------------------------
 # Main functions
 # ----------------------------------------
@@ -86,6 +90,7 @@ main_setup_venv() {
   uv sync --locked
   . .venv/bin/activate
 }
+
 
 # ----------------------------------------
 # Main script
@@ -115,5 +120,6 @@ fi
 if [ ! -e "${HOME}/.config/ansible" ]; then
   mkdir "${HOME}/.config/ansible"
 fi
+
 
 main_setup_venv
