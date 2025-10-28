@@ -6,6 +6,13 @@
   become: true
   tags: [flatpak]
 
+- name: "Remove the fedora remote"
+  community.general.flatpak_remote:
+    name: "fedora"
+    state: absent
+  when: ansible_facts['distribution'] == "Fedora"
+  tags: [flatpak]
+
 - name: "Install Flathub remote"
   community.general.flatpak_remote:
     name: "flathub"
