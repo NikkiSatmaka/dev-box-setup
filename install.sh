@@ -32,7 +32,7 @@ install_homebrew() {
   case "$ID" in
     fedora) sudo dnf install -y @development-tools procps-ng curl file ;;
     debian|ubuntu|linuxmint) sudo apt-get install -y build-essential procps curl file git ;;
-    macos) sudo softwareupdate --install-rosetta ;;
+    macos) xcode-select --install || true; softwareupdate --install-rosetta ;;
   esac
   NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL $HOMEBREW_INSTALL_SCRIPT)"
 }
