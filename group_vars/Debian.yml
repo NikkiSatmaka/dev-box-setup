@@ -1,0 +1,69 @@
+---
+_bat_exec: "/usr/bin/batcat"
+
+tmux_clipboard: "wl-copy"
+
+pkg_mgr_repos:
+  base:
+    - name: "backports"
+      uris: "http://deb.debian.org/debian"
+      components:
+        - "main"
+        - "contrib"
+        - "non-free"
+        - "non-free-firmware"
+      suites: ["{{ ansible_facts['distribution_release'] }}-backports"]
+      enabled: true
+      signed_by: "/usr/share/keyrings/debian-archive-keyring.gpg"
+
+pkg_mgr_cli:
+  base:
+    - apt-file
+    - asciinema
+    - atool
+    - atuin
+    - bash-completion
+    - bat
+    - bcal
+    - diceware
+    - duf
+    - eza
+    - fastfetch
+    - fd-find
+    - ffmpeg
+    - figlet
+    - fzf
+    - httpie
+    - iftop
+    - jq
+    - kitty
+    - libvirt-clients
+    - mtr
+    - nmap
+    - pdfgrep
+    - poppler-utils
+    - ripgrep
+    - shellcheck
+    - strace
+    - tidy
+    - tlp
+    - trurl
+    - toilet
+    - tree
+    - wget
+    - xz-utils
+    - yt-dlp
+  formulas:
+    - antidote
+    - argc
+    - bat-extras
+    - dua-cli
+    - fclones
+    - qsv
+    - uv
+    - yq
+
+pkg_mgr_gui:
+  flatpak:
+    - "com.bitwarden.desktop"
+    - "us.zoom.Zoom"
